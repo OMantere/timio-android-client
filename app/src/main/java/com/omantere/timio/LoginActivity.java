@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.omantere.timio.lib.Helpers;
 import com.omantere.timio.lib.User;
 import com.goebl.david.Response;
 import com.goebl.david.Webb;
@@ -315,7 +316,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             String clientToken = null;
-            BufferedInputStream in;
 
             try {
                 // Authenticate against the token endpoint
@@ -355,8 +355,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            // Write the retrieved key to SharedPreferences
+            // Write the retrieved data to SharedPreferences
             User.storeClientToken(context, clientToken);
+            User.storeEmail(context, mEmail);
             return true;
         }
 

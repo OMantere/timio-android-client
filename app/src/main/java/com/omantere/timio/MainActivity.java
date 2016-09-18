@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.omantere.timio.lib.User;
 import com.omantere.timio.lib.Permissions;
@@ -23,16 +24,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         registerUIHandlers();
         syncManager = new SyncManager(this);
-        checkLogin();
         syncManager.createSyncAccount();
-        checkUsageStatsPermissionsAndSync();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         checkLogin();
-        syncManager.setupPeriodicSync();
+        checkUsageStatsPermissionsAndSync();
     }
 
     private void registerUIHandlers() {
@@ -56,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private void checkLogin() {
         if(User.getClientToken(context) == null)
             showLoginScreen();
+        else {
+            TextView contentTextView = (TextView) findViewById(R.id.contentTextView);
+            contentTextView.setText("Timio is now succesfully gathering app usage data from your Android device!" +
+                    "\n\nYou are logged in as " + User.getEmail(context));
+        }
     }
 
     private void showLoginScreen() {
