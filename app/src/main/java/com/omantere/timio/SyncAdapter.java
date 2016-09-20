@@ -49,7 +49,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         usageStatsManager = (UsageStatsManager)context.getSystemService(Context.USAGE_STATS_SERVICE);
         packageManager = context.getPackageManager();
         this.context = context;
-        clientDataEndpoint = context.getString(R.string.server_api_url) + "/push_client_data";
+        clientDataEndpoint = context.getString(R.string.server_api_url) + "/client/push_data";
     }
 
     /**
@@ -100,7 +100,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             String eventType;
             if((eventType = getEventType(event)) == null) {
-                break;
+                continue;
             }
 
             ApplicationInfo info = getApplicationInfo(event.getPackageName());
@@ -109,8 +109,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             try {
                 eventJson.put("packageName", info.packageName);
                 eventJson.put("appName", appName);
-                eventJson.put("startTime", event.getTimeStamp());
+                eventJson.put("time", event.getTimeStamp()/1000);
                 eventJson.put("eventType", eventType);
+                eventJson.put("device", "android");
                 eventsJson.put(eventJson);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -187,8 +188,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         Log.w("SyncAdapter", "Performing sync");
-        long endTime = System.currentTimeMillis();
-        long startTime = endTime - 1000*60*60*24;
+        long dayMillis = 1000*60*60*24;
+        long endTime = System.currentTimeMillis() + dayMillis;
+        long startTime = endTime - dayMillis*2;
 
         UsageEvents events = usageStatsManager.queryEvents(startTime, endTime);
         JSONArray eventsJson = serializeEvents(events);

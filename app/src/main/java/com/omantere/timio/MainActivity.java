@@ -2,6 +2,7 @@ package com.omantere.timio;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
@@ -38,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         Button button = (Button) findViewById(R.id.logout_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                User.removeClientToken(context);
-                showLoginScreen();
+                syncManager.setupPeriodicSync();
             }
         });
 

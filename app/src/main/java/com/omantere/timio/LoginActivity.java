@@ -306,7 +306,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-        private final String tokenEndpoint = context.getString(R.string.server_api_url) + "/get_client_token";
+        private final String tokenEndpoint = context.getString(R.string.server_api_url) + "/client/get_token";
 
         UserLoginTask(String email, String password) {
             mEmail = email;
